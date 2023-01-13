@@ -46,21 +46,36 @@ class JogoDosOito:
         if direcao == 'esquerda':
             posicaoDoVazio = self.posicao(' ')
             posicaoDoNumero = [posicaoDoVazio[0], posicaoDoVazio[1]-1]
-            self.jogo[posicaoDoVazio[0]][posicaoDoNumero[1]] = self.jogo[posicaoDoNumero[0]][posicaoDoNumero[1]]
+            self.jogo[posicaoDoVazio[0]][posicaoDoVazio[1]] = self.jogo[posicaoDoNumero[0]][posicaoDoNumero[1]]
             self.jogo[posicaoDoNumero[0]][posicaoDoNumero[1]] = ' '
         elif direcao == 'direita':
             posicaoDoVazio = self.posicao(' ')
             posicaoDoNumero = [posicaoDoVazio[0], posicaoDoVazio[1]+1]
-            self.jogo[posicaoDoVazio[0]][posicaoDoNumero[1]] = self.jogo[posicaoDoNumero[0]][posicaoDoNumero[1]]
+            self.jogo[posicaoDoVazio[0]][posicaoDoVazio[1]] = self.jogo[posicaoDoNumero[0]][posicaoDoNumero[1]]
             self.jogo[posicaoDoNumero[0]][posicaoDoNumero[1]] = ' '
         elif direcao == 'cima':
-            posicaoDoVazio = self.posicao(self.jogo, ' ')
+            posicaoDoVazio = self.posicao(' ')
             posicaoDoNumero = [posicaoDoVazio[0]-1, posicaoDoVazio[1]]
-            self.jogo[posicaoDoVazio[0]][posicaoDoNumero[1]] = self.jogo[posicaoDoNumero[0]][posicaoDoNumero[1]]
+            self.jogo[posicaoDoVazio[0]][posicaoDoVazio[1]] = self.jogo[posicaoDoNumero[0]][posicaoDoNumero[1]]
             self.jogo[posicaoDoNumero[0]][posicaoDoNumero[1]] = ' '
         elif direcao == 'baixo':
-            posicaoDoVazio = self.posicao(self.jogo, ' ')
+            posicaoDoVazio = self.posicao(' ')
             posicaoDoNumero = [posicaoDoVazio[0]+1, posicaoDoVazio[1]]
-            self.jogo[posicaoDoVazio[0]][posicaoDoNumero[1]] = self.jogo[posicaoDoNumero[0]][posicaoDoNumero[1]]
+            self.jogo[posicaoDoVazio[0]][posicaoDoVazio[1]] = self.jogo[posicaoDoNumero[0]][posicaoDoNumero[1]]
             self.jogo[posicaoDoNumero[0]][posicaoDoNumero[1]] = ' '
             
+    def movimentosPossiveis(self):
+        # verifica quais movimentos podem ser feitos e retorna as direçoes
+        direcoes = ['esquerda', 'direita', 'baixo', 'cima']
+        posicaoDoVazio = self.posicao(' ')
+        if posicaoDoVazio[0] == 0:
+            direcoes.remove('cima')
+        if posicaoDoVazio[0] == 2:
+            direcoes.remove('baixo')
+        if posicaoDoVazio[1] == 0:
+            direcoes.remove('esquerda')
+        if posicaoDoVazio[1] == 2:
+            direcoes.remove('direita')
+        return direcoes
+    
+    
