@@ -1,20 +1,11 @@
 import random
+from copy import deepcopy
 
 class JogoDosOito:
     def __init__(self):
         self.jogo = []
         for i in range(3):
             self.jogo.append([[],[],[]])
-
-    # cria a tabela que deve ser o estado final do jogo
-    def objetivo(self):
-        cont = 1
-        for i in range(3):
-            for j in range(3):
-                self.jogo[i][j] = cont
-                cont += 1
-                if cont == 9: 
-                    cont = ' '
 
     # carrega uma tabela aleatória do jogo dos 8
     def jogoAleatorio(self):
@@ -28,10 +19,15 @@ class JogoDosOito:
         print('Tabela: ')
         for i in self.jogo:
             print(i)
+            
+    def objetivo(self):
+        objetivo = JogoDosOito()
+        objetivo.jogo = [[1,2,3],[4,5,6],[7,8,' ']]
+        return objetivo
 
     # vê se o estado atual é igual ao objetivo
     def estaCerto(self):
-        if self.jogo == self.objetivo():
+        if self.jogo == self.objetivo().jogo:
             return True
 
     # retorna um vetor[i, j] que vai indicar a posicao de num
