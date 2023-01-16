@@ -23,11 +23,11 @@ class JogoDosOito:
     def objetivo(self):
         objetivo = JogoDosOito()
         objetivo.jogo = [[1,2,3],[4,5,6],[7,8,' ']]
-        return objetivo
+        return objetivo.jogo
 
     # vê se o estado atual é igual ao objetivo
     def estaCerto(self):
-        if self.jogo == self.objetivo().jogo:
+        if self.jogo == self.objetivo():
             return True
 
     # retorna um vetor[i, j] que vai indicar a posicao de num
@@ -74,4 +74,20 @@ class JogoDosOito:
             direcoes.remove('direita')
         return direcoes
     
+    def igual(self, jogoComparado):
+        for i in range(3):
+            for j in range(3):
+                if self.jogo[i][j] != jogoComparado.jogo[i][j]:
+                    return False
+        return True
+    
+    def quantidadePosicoesErradas(self):
+        cont = 0
+        for i in range(3):
+            for j in range(3):
+                if self.jogo[i][j] != self.objetivo()[i][j]:
+                    cont += 1
+        return cont   
+    
+
     
