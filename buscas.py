@@ -97,8 +97,11 @@ def buscaEmLargura():
             direcoes = node[0].movimentosPossiveis()
             for direcao in direcoes:
                 estadoFilho = adicionaEstadoFilho(arvoreDeBusca, node, direcao, cont)
+                cont += 1
                 fronteira[-1].append(estadoFilho)
                 arvoreDeBusca.add_edge(node[2], estadoFilho[2])
+                # nx.draw(arvoreDeBusca, with_labels=True, node_size=1200, node_color='red')
+                # plt.show()
         if flag:
             break
                 
