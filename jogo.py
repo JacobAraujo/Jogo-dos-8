@@ -1,7 +1,9 @@
 import random
-from copy import deepcopy
 
 class JogoDosOito:
+    
+    objetivo = [[1,2,3],[4,5,6],[7,8,' ']]
+    
     def __init__(self):
         self.jogo = []
         for i in range(3):
@@ -19,15 +21,10 @@ class JogoDosOito:
         print('Tabela: ')
         for i in self.jogo:
             print(i)
-            
-    def objetivo(self):
-        objetivo = JogoDosOito()
-        objetivo.jogo = [[1,2,3],[4,5,6],[7,8,' ']]
-        return objetivo.jogo
 
     # vê se o estado atual é igual ao objetivo
     def estaCerto(self):
-        if self.jogo == self.objetivo():
+        if self.jogo == JogoDosOito.objetivo:
             return True
 
     # retorna um vetor[i, j] que vai indicar a posicao de num
@@ -85,7 +82,7 @@ class JogoDosOito:
         cont = 0
         for i in range(3):
             for j in range(3):
-                if self.jogo[i][j] != self.objetivo()[i][j]:
+                if self.jogo[i][j] != JogoDosOito.objetivo[i][j]:
                     cont += 1
         return cont   
     
