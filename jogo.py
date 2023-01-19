@@ -100,11 +100,11 @@ class JogoDosOito:
                if num == 9: num = ' '
         return cont
 
-jogo = JogoDosOito()
-jogo.jogoAleatorio()
-jogo.imprime()
+# jogo = JogoDosOito()
+# jogo.jogoAleatorio()
+# jogo.imprime()
 
-print(jogo.distanciaDeManhattan())
+# print(jogo.distanciaDeManhattan())
         
     
 
