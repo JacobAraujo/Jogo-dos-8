@@ -84,7 +84,28 @@ class JogoDosOito:
             for j in range(3):
                 if self.jogo[i][j] != JogoDosOito.objetivo[i][j]:
                     cont += 1
-        return cont   
+        return cont 
+    
+    def distanciaDeManhattan(self):
+        cont = 0
+        num = 1
+        posicaoAtual = [0, 0]
+        for i in range(3):
+            for j in range(3):
+               posicaoAtual = self.posicao(num)
+               distanciaHorizontal = abs(i - posicaoAtual[0])
+               distanciaVertical = abs(j - posicaoAtual[1])
+               cont += distanciaHorizontal + distanciaVertical
+               if type(num) == int: num += 1
+               if num == 9: num = ' '
+        return cont
+
+jogo = JogoDosOito()
+jogo.jogoAleatorio()
+jogo.imprime()
+
+print(jogo.distanciaDeManhattan())
+        
     
 
     
