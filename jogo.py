@@ -24,8 +24,8 @@ class JogoDosOito:
 
     # vê se o estado atual é igual ao objetivo
     def estaCerto(self):
-        if self.jogo == JogoDosOito.objetivo:
-            return True
+        return self.jogo == JogoDosOito.objetivo
+
 
     # retorna um vetor[i, j] que vai indicar a posicao de num
     def posicao(self, num):
