@@ -1,14 +1,7 @@
 import random
-from collections import deque
 from copy import deepcopy
 
-import networkx as nx
-
 from jogo import JogoDosOito
-
-# Falta oegar o caminho até a solução. Vou fazer isso usando o propriedade "direcao" na tupla "estado" para
-# retroceder o estado até o estado inicial pegando o caminho inverso
-
 
 def getEstadoFilho(estadoPai, direcao, nome, profundidade):
     jogoAdd = deepcopy(estadoPai[0])
@@ -58,50 +51,75 @@ def personalizaEscolha(filhos):
 
 def buscaEmProfundidade():
     jogo = JogoDosOito()
-    jogo.jogo[0] = [1, 2, ' ']
+    # jogo.jogo[0] = [1, 2, ' ']
+    # jogo.jogo[1] = [4, 5, 6]
+    # jogo.jogo[2] = [3, 7, 8]
+    
+    # jogo.jogo[0] = [7, 3, ' ']
+    # jogo.jogo[1] = [4, 8, 6]
+    # jogo.jogo[2] = [2, 1, 5]  
+    
+    jogo.jogo[0] = [1, 3, ' ']
     jogo.jogo[1] = [4, 5, 6]
-    jogo.jogo[2] = [3, 7, 8]
+    jogo.jogo[2] = [7, 8, 2]
 
     # jogo, direcao de que veio, nome, profundidade
     estadoInicial = (jogo, '', 0, 0)
 
     cont = 1
-    menor = 10
     pilha = [estadoInicial]
+    menor = float('inf')
     visitados = []
-    estadoMelhor = estadoInicial
+    estadosVisitados = 0
+    maiorFronteira = 0
 
-    profundidadeMaxima = 31
-    while pilha and cont < 100000:
-        estadoAtual = pilha.pop()  # pilha = [1, 3, 4]
-        # print('Estado atual: ')
-        # estadoAtual[0].imprime()
-
-        if estadoAtual[0].quantidadePosicoesErradas() <= menor:
-            menor = estadoAtual[0].quantidadePosicoesErradas()
-            estadoMelhor = estadoAtual[0]
-            estadoMelhor.imprime()
-            print(estadoMelhor.quantidadePosicoesErradas())
-
+    profundidadeMaxima = 10
+    while pilha:
+        if len(pilha) > maiorFronteira: # pega a maior fronteira que foi guardada
+            maiorFronteira = len(pilha)        
+        
+        estadoAtual = pilha.pop() 
+        
+        visitado = False
+        for teste in visitados:
+            if estadoAtual[0].igual(teste):
+                visitado = True
+                break
+        if visitado:
+            continue
+        
+        visitados.append(estadoAtual[0])
+        
+        if estadoAtual[0].distanciaDeManhattan() <= menor:
+            menor = estadoAtual[0].distanciaDeManhattan()
+            estadoMelhor = estadoAtual
+        
         if estadoAtual[0].estaCerto():
             print('esta certo')
             break
-        visitados.append(estadoAtual[0])
+        
+        estadosVisitados += 1 # Pega quantos nós foram visitados
 
         if estadoAtual[3] > profundidadeMaxima:
             continue
-
-        for teste in visitados:
-            if estadoAtual[0].igual(teste):
-                continue
+            
         direcoes = estadoAtual[0].movimentosPossiveis()
+
+        if estadoAtual[1]:
+            direcoes.remove(JogoDosOito.direcaoContraria(estadoAtual[1]))
+        
         random.shuffle(direcoes)
+        
         for direcao in direcoes:
             estadoFilho = getEstadoFilho(
                 estadoAtual, direcao, cont, estadoAtual[3] + 1)
             pilha.append(estadoFilho)
             cont += 1
-    print(cont)
+
+    estadoMelhor[0].imprime()
+    print('Profundidade: ', estadoMelhor[3])
+    print('Nos visitados: ', estadosVisitados)
+    print('Maior fronteira: ', maiorFronteira)
 
 
 def buscaEmLargura():
@@ -109,7 +127,10 @@ def buscaEmLargura():
     # jogo.jogo[0] = [1, ' ', 3]
     # jogo.jogo[1] = [2, 5, 6]
     # jogo.jogo[2] = [4, 7, 8]
-    jogo.jogoAleatorio()
+
+    jogo.jogo[0] = [1, 3, ' ']
+    jogo.jogo[1] = [4, 5, 6]
+    jogo.jogo[2] = [7, 8, 2]
 
     estadoInicial = (jogo, '', 0)  # jogo, direcao de que veio, nome
 
@@ -120,15 +141,24 @@ def buscaEmLargura():
     fronteira = []
     fronteira.append([estadoInicial])
     fronteira.append([])
+    estadosVisitados = 0
+    maiorFronteira = 0
 
     while (profundidade < 31):
+        
+        if len(fronteira[0]) > maiorFronteira:
+            maiorFronteira = len(fronteira[0])
+        
         while fronteira[0]:
             node = fronteira[0].pop()
-            if node[0].quantidadePosicoesErradas() <= menor:
-                menor = node[0].quantidadePosicoesErradas()
-                estadoMelhor = node[0]
-                estadoMelhor.imprime()
-                print(estadoMelhor.quantidadePosicoesErradas())
+            # if node[0].quantidadePosicoesErradas() <= menor:
+            #     menor = node[0].quantidadePosicoesErradas()
+            #     estadoMelhor = node[0]
+            #     estadoMelhor.imprime()
+            #     print(estadoMelhor.quantidadePosicoesErradas())
+            
+            estadosVisitados += 1 # estados verificados
+
             if node[0].estaCerto():
                 print('esta certo')
                 flag = True
@@ -138,14 +168,16 @@ def buscaEmLargura():
                 filho = getEstadoFilho(node, direcao, cont, profundidade+1)
                 cont += 1
                 fronteira[1].append(filho)
-                # nx.draw(arvoreDeBusca, with_labels=True, node_size=1200, node_color='red')
-                # plt.show()
         fronteira[0] = fronteira[1]
         fronteira[1] = []
-        profundidade += 1
-        print('Profundidade: ', profundidade)
+        # print('Profundidade: ', profundidade)
         if flag:
             break
-
-
-buscaEmLargura()
+        profundidade += 1
+        
+    node[0].imprime()
+    print('Profundidade: ', profundidade)
+    print('Nos visitados: ', estadosVisitados)
+    print('Maior fronteira: ', maiorFronteira)
+        
+buscaEmProfundidade()

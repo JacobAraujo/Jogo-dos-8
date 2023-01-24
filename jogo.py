@@ -117,6 +117,16 @@ class JogoDosOito:
         if posicaoDoVazio[1] == 2:
             direcoes.remove('direita')
         return direcoes
+    
+    def direcaoContraria(direcao):
+        if direcao == 'baixo':
+            return 'cima'
+        if direcao == 'cima':
+            return 'baixo'
+        if direcao == 'esquerda':
+            return 'direita'
+        if direcao == 'direita':
+            return 'esquerda'
 
     def igual(self, jogoComparado):
         for i in range(3):
