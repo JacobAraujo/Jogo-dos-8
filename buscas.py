@@ -1,5 +1,6 @@
 import random
 from copy import deepcopy
+import numpy
 
 from jogo import JogoDosOito
 
@@ -8,12 +9,6 @@ def getEstadoFilho(estadoPai, direcao, nome, profundidade):
     jogoAdd.move(direcao)
     estado = (jogoAdd, direcao, nome, profundidade)
     return estado
-
-
-def adicionaNaArvore(arvore, estado):
-    arvore.add_node(estado[2])
-    nx.set_node_attributes(arvore, estado, estado[2])
-
 
 def getFilhos(estado, direcoes):
     filhos = []
@@ -37,17 +32,6 @@ def ordenaFilhos(filhos):
             filho[0].distanciaDeManhattan())
         filhosOrdenados[lugarCerto] = filho
     return filhosOrdenados
-
-
-def personalizaEscolha(filhos):
-    filhosPersonalizado = []
-    num = 40
-    for filho in filhos:
-        for i in range(num):
-            filhosPersonalizado.append(filho)
-        num -= 10
-    return filhosPersonalizado
-
 
 def buscaEmProfundidade():
     jogo = JogoDosOito()
@@ -179,5 +163,57 @@ def buscaEmLargura():
     print('Profundidade: ', profundidade)
     print('Nos visitados: ', estadosVisitados)
     print('Maior fronteira: ', maiorFronteira)
+    
+def movimento(matriz=JogoDosOito()):
+    direcoes = matriz.movimentosPossiveis()
+    filhos = []
+    for direcao in direcoes:
+        jogoAdd = deepcopy(matriz)
+        jogoAdd.move(direcao)
+        filhos.append(jogoAdd)
+    return filhos
+
+def menorSomatorio(filhos):
+    menor = float('inf')
+    for filho in filhos:
+        if filho.distanciaDeManhattan() < menor:
+            melhorFilho = filho
+            menor = filho.distanciaDeManhattan()
+    return melhorFilho
+    
+def buscaHeuristica(matrizPai=JogoDosOito(), resposta=JogoDosOito.objetivo):
+    custoDeEspaco=0
+    nivel=0#Nível da árvore
+    visitados=[matrizPai.jogo]#Começa com o pai
+    while(True):
+        if(matrizPai.estaCerto()):
+            print("Solucao encontrada")
+            break
+        nivel+=1
+        jogadasPossiveis=[]
+        for filho in movimento(matrizPai):
+            if filho.jogo not in visitados:
+               #visitados.append(filho)
+                jogadasPossiveis.append(filho)
+                #visitados.append(filho)
+        print("Tamanho dos visitados = "+str(len(visitados)))
+        custoDeEspaco+=len(jogadasPossiveis)#Todos os filhos gerados
+        try:
+            matrizPai = menorSomatorio(jogadasPossiveis)#Retorna o filho com as peças menos distantes
+            matrizPai.imprime()
+        except:
+            print("NAO POSSUI SOLUCAO")
+            break
+        visitados.append(matrizPai.jogo)
         
-buscaEmProfundidade()
+jogo = JogoDosOito()
+
+# jogo.jogo[0] = [1, ' ', 3]
+# jogo.jogo[1] = [2, 5, 6]
+# jogo.jogo[2] = [4, 7, 8]
+
+jogo.jogo[0] = [1, 3, ' ']
+jogo.jogo[1] = [4, 5, 6]
+jogo.jogo[2] = [7, 8, 2]
+
+buscaHeuristica(jogo)

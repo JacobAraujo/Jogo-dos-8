@@ -1,5 +1,6 @@
 import math
 import random
+import numpy
 
 
 class JogoDosOito:
@@ -67,7 +68,7 @@ class JogoDosOito:
 
     # vê se o estado atual é igual ao objetivo
     def estaCerto(self):
-        return self.jogo == JogoDosOito.objetivo
+        return numpy.array_equal(self.jogo,JogoDosOito.objetivo)
 
     # retorna um vetor[i, j] que vai indicar a posicao de num
 
