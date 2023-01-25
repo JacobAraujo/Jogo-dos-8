@@ -260,13 +260,15 @@ def buscaHeuristicaAEstrela(matrizPai, resposta):
             if filho not in visitados:
                 visitados.append(filho)
                 if filho == resposta:
+                    imprimindoTablueiro(filho)
                     print("Solução encontrada")
+                    print("Quantidade de movimentos: ", movimentosPai+1)
                     print(len(visitados))
                     return
                 else:
                     movimentosFilho = movimentosPai + 1
                     heappush(
-                        h, (movimentosFilho + (distaciaDeManhattan(filho, resposta)), movimentosFilho, filho))
+                        h, (movimentosFilho + distaciaDeManhattan(filho, resposta), movimentosFilho, filho))
 
     print("Sem Solucao")
 
