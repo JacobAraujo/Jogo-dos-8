@@ -7,48 +7,14 @@ from jogo import JogoDosOito
 def getEstadoFilho(estadoPai, direcao, nome, profundidade):
     jogoAdd = deepcopy(estadoPai[0])
     jogoAdd.move(direcao)
-    estado = (jogoAdd, direcao, nome, profundidade)
+    listaDirecoes = deepcopy(estadoPai[1])
+    listaDirecoes.append(direcao)
+    estado = (jogoAdd, listaDirecoes, nome, profundidade)
     return estado
 
-def getFilhos(estado, direcoes):
-    filhos = []
-    cont = estado[2]
-    for direcao in direcoes:
-        filhos.append(getEstadoFilho(estado, direcao, cont))
-        cont += 1
-    return filhos
-
-
-def ordenaFilhos(filhos):
-    distanciasDeManhattan = []
-    filhosOrdenados = []
-    for filho in filhos:
-        filhosOrdenados.append(filho)
-    for filho in filhos:
-        distanciasDeManhattan.append(filho[0].distanciaDeManhattan())
-    distanciasDeManhattan.sort()
-    for filho in filhos:
-        lugarCerto = distanciasDeManhattan.index(
-            filho[0].distanciaDeManhattan())
-        filhosOrdenados[lugarCerto] = filho
-    return filhosOrdenados
-
-def buscaEmProfundidade():
-    jogo = JogoDosOito()
-    # jogo.jogo[0] = [1, 2, ' ']
-    # jogo.jogo[1] = [4, 5, 6]
-    # jogo.jogo[2] = [3, 7, 8]
-    
-    # jogo.jogo[0] = [7, 3, ' ']
-    # jogo.jogo[1] = [4, 8, 6]
-    # jogo.jogo[2] = [2, 1, 5]  
-    
-    jogo.jogo[0] = [1, 3, ' ']
-    jogo.jogo[1] = [4, 5, 6]
-    jogo.jogo[2] = [7, 8, 2]
-
+def buscaEmProfundidade(jogo, resposta=JogoDosOito.objetivo):
     # jogo, direcao de que veio, nome, profundidade
-    estadoInicial = (jogo, '', 0, 0)
+    estadoInicial = (jogo, [], 0, 0)
 
     cont = 1
     pilha = [estadoInicial]
@@ -90,7 +56,7 @@ def buscaEmProfundidade():
         direcoes = estadoAtual[0].movimentosPossiveis()
 
         if estadoAtual[1]:
-            direcoes.remove(JogoDosOito.direcaoContraria(estadoAtual[1]))
+            direcoes.remove(JogoDosOito.direcaoContraria(estadoAtual[1][-1]))
         
         random.shuffle(direcoes)
         
@@ -104,19 +70,11 @@ def buscaEmProfundidade():
     print('Profundidade: ', estadoMelhor[3])
     print('Nos visitados: ', estadosVisitados)
     print('Maior fronteira: ', maiorFronteira)
+    return estadoMelhor[1]
 
 
-def buscaEmLargura():
-    jogo = JogoDosOito()
-    # jogo.jogo[0] = [1, ' ', 3]
-    # jogo.jogo[1] = [2, 5, 6]
-    # jogo.jogo[2] = [4, 7, 8]
-
-    jogo.jogo[0] = [1, 3, ' ']
-    jogo.jogo[1] = [4, 5, 6]
-    jogo.jogo[2] = [7, 8, 2]
-
-    estadoInicial = (jogo, '', 0)  # jogo, direcao de que veio, nome
+def buscaEmLargura(jogo, resposta=JogoDosOito().objetivo):
+    estadoInicial = (jogo, [], 0, 0)  # jogo, lista de direcoes de que veio, nome
 
     menor = 10
     cont = 1
@@ -163,6 +121,7 @@ def buscaEmLargura():
     print('Profundidade: ', profundidade)
     print('Nos visitados: ', estadosVisitados)
     print('Maior fronteira: ', maiorFronteira)
+    return node[1]
     
 def movimento2(matriz=JogoDosOito()):
     direcoes = matriz.movimentosPossiveis()
@@ -241,7 +200,28 @@ def executaBuscaHeuristica():
     resposta=[['1','2','3'],['4','5','6'],['7','8','0']]
     busca_heuristica2(matriz, resposta)
     
-executaBuscaHeuristica()
+def aplicandoCaminho(jogo, caminho):
+    jogo.imprime()
+    for direcao in caminho:
+        jogo.move(direcao)
+        jogo.imprime()
+    
+jogo = JogoDosOito()
+# jogo.jogo[0] = [1, 2, ' ']
+# jogo.jogo[1] = [4, 5, 6]
+# jogo.jogo[2] = [3, 7, 8]
+
+# jogo.jogo[0] = [7, 3, ' ']
+# jogo.jogo[1] = [4, 8, 6]
+# jogo.jogo[2] = [2, 1, 5]  
+
+jogo.jogo[0] = [1, 3, ' ']
+jogo.jogo[1] = [4, 5, 6]
+jogo.jogo[2] = [7, 8, 2]
+
+caminho = buscaEmProfundidade(jogo)
+
+aplicandoCaminho(jogo, caminho)
     
 
         
