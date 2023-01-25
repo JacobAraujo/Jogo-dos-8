@@ -5,7 +5,7 @@ from heapq import heappop, heappush
 from random import shuffle
 from time import sleep
 
-import numpy
+# import numpy
 
 # resposta=[['1','2','3'],['8','0','4'],['7','6','5']]
 # matriz=[ ['0','1','2'],['7','8','3'],['6','5','4'] ]
@@ -15,7 +15,7 @@ resposta = [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '0']]
 # matriz=[['1','3','6'],['4','2','0'],['7','5','8']]
 matriz = [['1', '3', '0'], ['4', '5', '6'], ['7', '8', '2']]
 matriz = [['4', '1', '3'], ['5', '6', '0'], ['7', '8', '2']]
-# matriz=[['0','6','1'],['4','5','3'],['7','8','2']]
+matrizTeste = [['0', '6', '1'], ['4', '5', '3'], ['7', '8', '2']]
 # matriz=[['6','5','1'],['4','8','0'],['7','2','3']]
 
 
@@ -260,16 +260,20 @@ def buscaHeuristicaAEstrela(matrizPai, resposta):
             if filho not in visitados:
                 visitados.append(filho)
                 if filho == resposta:
+                    imprimindoTablueiro(filho)
                     print("Solução encontrada")
+                    print("Quantidade de movimentos: ", movimentosPai+1)
                     print(len(visitados))
                     return
                 else:
                     movimentosFilho = movimentosPai + 1
                     heappush(
-                        h, movimentosFilho + (distaciaDeManhattan(filho, resposta), movimentosFilho, filho))
+                        h, (movimentosFilho + distaciaDeManhattan(filho, resposta), movimentosFilho, filho))
 
     print("Sem Solucao")
 
+
+buscaHeuristicaAEstrela(matrizTeste, resposta)
 
 """
 
