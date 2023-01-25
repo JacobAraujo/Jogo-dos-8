@@ -146,8 +146,8 @@ def menorSomatorio(filhos):
     distanciasDosFilhos = []
     for i in filhos:
         distanciasDosFilhos.append(distaciaDeManhattan(i, resposta))
-    # print("Vetor de distancia dos filhos")
-    # print(distanciasDosFilhos)
+    print("Vetor de distancia dos filhos")
+    print(distanciasDosFilhos)
     posVet = distanciasDosFilhos.index(min(distanciasDosFilhos))
     # retorna o filho que tem a menor distancia das peças
     return filhos[posVet]
@@ -164,8 +164,6 @@ def posicaoErrada(matriz, resposta):
     return cont
 
 # Busca gulosa utilizando como fronteira apenas os filhos de um pai que foi escolhido pela distÂncia de manhattan
-
-
 def buscaHeuristica(matrizPai, resposta):
     custoDeEspaco = 0
     nivel = 0  # Nível da árvore
@@ -178,9 +176,7 @@ def buscaHeuristica(matrizPai, resposta):
         jogadasPossiveis = []
         for filho in movimento(matrizPai):
             if filho not in visitados:
-                # visitados.append(filho)
                 jogadasPossiveis.append(filho)
-                # visitados.append(filho)
         print("Tamanho dos visitados = "+str(len(visitados)))
         custoDeEspaco += len(jogadasPossiveis)  # Todos os filhos gerados
         try:
@@ -194,27 +190,34 @@ def buscaHeuristica(matrizPai, resposta):
         visitados.append(matrizPai)
 
 # Busca gulosa com fronteira muito grande são todos os nós que ainda não foram expandidos
-
-
 def busca_heuristica2(matrizPai, resposta):
     h = []
     # Adiciona os elementos a heap  (distancia de manhattan , nó)
     heappush(h, (distaciaDeManhattan(matrizPai, resposta), matrizPai))
     visitados = [matrizPai]
     cont = 0
+    fronteira=0
+    qtdnos=0
     while (len(h) > 0):
+        if len(h)>fronteira:#Pegar a maior fornteira
+            fronteira = len(h)
         cont += 1
         print("\n"+str(cont)+"\n")
         (_, pai) = heappop(h)  # Retira o menor elemento da heap
+        
         imprimindoTablueiro(pai)
 
         for filho in movimento(pai):
+            qtdnos+=1
             if filho not in visitados:
                 visitados.append(filho)
                 if filho == resposta:
                     print("Solução encontrada")
                     print("Tamanho do vetor dos nós que são visitados "+str(len(visitados)))
                     print("Quantidades de movimento "+str(cont))
+                    print("Maior fronteira de estados guardada "+ str(fronteira))
+                    print("Quantidade de nós geradas "+ str(qtdnos))
+                    
                     return
                 else:
                     heappush(h, (distaciaDeManhattan(filho, resposta), filho))
