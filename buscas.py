@@ -164,7 +164,7 @@ def buscaEmLargura():
     print('Nos visitados: ', estadosVisitados)
     print('Maior fronteira: ', maiorFronteira)
     
-def movimento(matriz=JogoDosOito()):
+def movimento2(matriz=JogoDosOito()):
     direcoes = matriz.movimentosPossiveis()
     filhos = []
     for direcao in direcoes:
@@ -173,7 +173,7 @@ def movimento(matriz=JogoDosOito()):
         filhos.append(jogoAdd)
     return filhos
 
-def menorSomatorio(filhos):
+def menorSomatorio2(filhos):
     menor = float('inf')
     for filho in filhos:
         if filho.distanciaDeManhattan() < menor:
@@ -204,16 +204,45 @@ def buscaHeuristica(matrizPai=JogoDosOito(), resposta=JogoDosOito.objetivo):
         except:
             print("NAO POSSUI SOLUCAO")
             break
-        visitados.append(matrizPai.jogo)
+        visitados.append(matrizPai.jogo)       
         
-jogo = JogoDosOito()
+def busca_heuristica2adaptada(matrizPai=JogoDosOito(),resposta=JogoDosOito().objetivo):
+    h = []
+    nome=0
+    heappush(h,(matrizPai.distanciaDeManhattan(), nome, matrizPai))#Adiciona os elementos a heap  (distancia de manhattan , nó)
+    visitados = [matrizPai]
+    cont=0 
+    
+    while (len(h)>0):
+        cont+=1
+        print("\n"+str(cont)+"\n")
+        (_,__, pai) = heappop(h)#Retira o menor elemento da heap
+        pai.imprime()
 
-# jogo.jogo[0] = [1, ' ', 3]
-# jogo.jogo[1] = [2, 5, 6]
-# jogo.jogo[2] = [4, 7, 8]
+        for filho in movimento2(pai):
+            nome+=1
+            print(movimento2(pai))
+            if filho.jogo not in visitados:
+                visitados.append(filho)
+                if filho.estaCerto():
+                    print("Solução encontrada")
+                    print(len(visitados))
+                    return 
+                else:
+                    heappush(h,(filho.distanciaDeManhattan(),nome , filho))
 
-jogo.jogo[0] = [1, 3, ' ']
-jogo.jogo[1] = [4, 5, 6]
-jogo.jogo[2] = [7, 8, 2]
+    print("Sem Solucao")
+    
+from heapq import heappush, heappop
+from jogoDos8 import busca_heuristica2   
+        
+def executaBuscaHeuristica():
+    matriz=[['1','3','0'],['4','5','6'],['7','8','2']]
+    resposta=[['1','2','3'],['4','5','6'],['7','8','0']]
+    busca_heuristica2(matriz, resposta)
+    
+executaBuscaHeuristica()
+    
 
-buscaHeuristica(jogo)
+        
+
