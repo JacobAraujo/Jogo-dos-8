@@ -159,7 +159,7 @@ def buscaHeuristica(matrizPai=JogoDosOito(), resposta=JogoDosOito.objetivo):
             break
         nivel += 1
         jogadasPossiveis = []
-        for filho in movimento(matrizPai):
+        for filho in movimento2(matrizPai):
             if filho.jogo not in visitados:
                # visitados.append(filho)
                 jogadasPossiveis.append(filho)
@@ -168,7 +168,7 @@ def buscaHeuristica(matrizPai=JogoDosOito(), resposta=JogoDosOito.objetivo):
         custoDeEspaco += len(jogadasPossiveis)  # Todos os filhos gerados
         try:
             # Retorna o filho com as peças menos distantes
-            matrizPai = menorSomatorio(jogadasPossiveis)
+            matrizPai = menorSomatorio2(jogadasPossiveis)
             matrizPai.imprime()
         except:
             print("NAO POSSUI SOLUCAO")

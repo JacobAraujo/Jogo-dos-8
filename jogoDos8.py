@@ -4,6 +4,7 @@ import copy
 from heapq import heappop, heappush
 from random import shuffle
 from time import sleep
+import numpy
 
 # import numpy
 
