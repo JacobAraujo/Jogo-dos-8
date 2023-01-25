@@ -225,4 +225,3 @@ aplicandoCaminho(jogo, caminho)
     
 
         
-
