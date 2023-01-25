@@ -211,6 +211,7 @@ def executaBuscaHeuristica():
     busca_heuristica2(matriz, resposta)
 
 
+
 def aplicandoCaminho(jogo, caminho):
     jogo.imprime()
     for direcao in caminho:
@@ -234,3 +235,6 @@ jogo.jogo[2] = [7, 8, 2]
 caminho = buscaEmProfundidade(jogo)
 
 aplicandoCaminho(jogo, caminho)
+
+#Execuntando a busca gulosa
+executaBuscaHeuristica()

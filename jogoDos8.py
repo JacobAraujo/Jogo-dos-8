@@ -25,7 +25,8 @@ matrizTeste = [['0', '6', '1'], ['4', '5', '3'], ['7', '8', '2']]
 # matriz=[ ['1','2','3'],['7','4','5'],['0','8','6'] ]
 
 
-# nao encontra solução
+#nao encontra solução
+#matrizTeste=[ ['2','3','1'],['4','5','7'],['6','8','0'] ] # 
 # matriz=[ ['2','3','1'],['4','5','7'],['6','8','0'] ] #ñ é encontrada na busca gulosa
 # matriz=[ ['7','8','0'],['4','5','6'],['2','1','3'] ] #não é encontrada na busca gulosa nem na heuristica
 # matriz=[ ['8','7','6'],['5','4','3'],['2','1','0'] ] #não é encontrada na busca gulosa nem na heuristica
@@ -162,30 +163,6 @@ def posicaoErrada(matriz, resposta):
                 cont += 1
     return cont
 
-
-"""
-def buscaEmProfundidade(matriz):
-    nivel=0#Profundidade dos nós
-    noNaoVisitado=[matriz]#pilha que começa com o primeiro nó
-    custoDeEspaco=0
-    while(len(noNaoVisitado)>0):
-        pai=noNaoVisitado.pop()#elemento do topo da pilha 
-
-        if (numpy.array_equal(pai,resposta)):
-            print("Solucao encontrada")
-            
-        
-        nivel+=1
-        jogadasPossiveis=movimento(pai) #retorna os filhos possiveis do pai
-        custoDeEspaco+=len(jogadasPossiveis)#Todos os filhos gerados
-        shuffle(jogadasPossiveis)#Embaralha os filhos 
-
-        noNaoVisitado.append(jogadasPossiveis[0])#adiciona o nó mais a esquerda
-
-
-def buscaEmLargura():
-    pass
-"""
 # Busca gulosa utilizando como fronteira apenas os filhos de um pai que foi escolhido pela distÂncia de manhattan
 
 
@@ -236,7 +213,8 @@ def busca_heuristica2(matrizPai, resposta):
                 visitados.append(filho)
                 if filho == resposta:
                     print("Solução encontrada")
-                    print(len(visitados))
+                    print("Tamanho do vetor dos nós que são visitados "+str(len(visitados)))
+                    print("Quantidades de movimento "+str(cont))
                     return
                 else:
                     heappush(h, (distaciaDeManhattan(filho, resposta), filho))
