@@ -8,42 +8,42 @@ from jogo import JogoDosOito
 from jogoDos8 import busca_heuristica2
 
 
-def getEstadoFilho(estadoPai, direcao, nome, profundidade):
+def getEstadoFilho(estadoPai, direcao, profundidade):
     jogoAdd = deepcopy(estadoPai[0])
     jogoAdd.move(direcao)
     listaDirecoes = deepcopy(estadoPai[1])
     listaDirecoes.append(direcao)
-    estado = (jogoAdd, listaDirecoes, nome, profundidade)
+    estado = (jogoAdd, listaDirecoes, profundidade)
     return estado
 
 
-def buscaEmProfundidade(jogo, resposta=JogoDosOito.objetivo):
+def buscaEmProfundidade(jogo=JogoDosOito(), resposta=JogoDosOito.objetivo):
     # jogo, direcao de que veio, nome, profundidade
     estadoInicial = (jogo, [], 0, 0)
 
-    cont = 1
     pilha = [estadoInicial]
     menor = float('inf')
-    visitados = []
+    visitados = set()
     estadosVisitados = 0
     maiorFronteira = 0
 
-    profundidadeMaxima = 11
+    profundidadeMaxima = 31
     while pilha:
         if len(pilha) > maiorFronteira:  # pega a maior fronteira que foi guardada
             maiorFronteira = len(pilha)
 
         estadoAtual = pilha.pop()
-
-        visitado = False
-        for teste in visitados:
-            if estadoAtual[0].igual(teste):
-                visitado = True
-                break
-        if visitado:
+        
+        if estadoAtual[2] > profundidadeMaxima:
             continue
 
-        visitados.append(estadoAtual[0])
+        # visitado = False
+        # for teste in visitados:
+        #     if estadoAtual[0].igual(teste):
+        #         visitado = True
+        #         break
+        # if visitado:
+        #     continue
 
         if estadoAtual[0].distanciaDeManhattan() <= menor:
             menor = estadoAtual[0].distanciaDeManhattan()
@@ -53,26 +53,24 @@ def buscaEmProfundidade(jogo, resposta=JogoDosOito.objetivo):
             print('esta certo')
             break
 
-        estadosVisitados += 1  # Pega quantos nós foram visitados
-
-        if estadoAtual[3] > profundidadeMaxima:
-            continue
-
         direcoes = estadoAtual[0].movimentosPossiveis()
 
-        if estadoAtual[1]:
-            direcoes.remove(JogoDosOito.direcaoContraria(estadoAtual[1][-1]))
+        # if estadoAtual[1]:
+        #     direcoes.remove(JogoDosOito.direcaoContraria(estadoAtual[1][-1]))
 
         random.shuffle(direcoes)
 
         for direcao in direcoes:
             estadoFilho = getEstadoFilho(
-                estadoAtual, direcao, cont, estadoAtual[3] + 1)
+                estadoAtual, direcao, estadoAtual[2] + 1)                   
             pilha.append(estadoFilho)
-            cont += 1
+        
+        visitados.add(estadoAtual[0])
+        estadosVisitados += 1  # Pega quantos nós foram visitados
 
     estadoMelhor[0].imprime()
-    print('Profundidade: ', estadoMelhor[3])
+    print(estadoMelhor[0].distanciaDeManhattan())
+    print('Profundidade: ', estadoMelhor[2])
     print('Nos visitados: ', estadosVisitados)
     print('Maior fronteira: ', maiorFronteira)
     return estadoMelhor[1]
@@ -80,10 +78,9 @@ def buscaEmProfundidade(jogo, resposta=JogoDosOito.objetivo):
 
 def buscaEmLargura(jogo, resposta=JogoDosOito().objetivo):
     # jogo, lista de direcoes de que veio, nome
-    estadoInicial = (jogo, [], 0, 0)
+    estadoInicial = (jogo, [], 0)
 
     # menor = 10
-    cont = 1
     profundidade = 0
     flag = False
     fronteira = []
@@ -113,8 +110,7 @@ def buscaEmLargura(jogo, resposta=JogoDosOito().objetivo):
                 break
             direcoes = node[0].movimentosPossiveis()
             for direcao in direcoes:
-                filho = getEstadoFilho(node, direcao, cont, profundidade+1)
-                cont += 1
+                filho = getEstadoFilho(node, direcao, profundidade+1)
                 fronteira[1].append(filho)
         fronteira[0] = fronteira[1]
         fronteira[1] = []
