@@ -1,14 +1,6 @@
 # https://github.com/LUCIANOGFORTES02/JogoDos8/blob/main/jogoDos8.py
 
 import copy
-from heapq import heappop, heappush
-from random import shuffle
-from time import sleep
-import numpy
-
-# import numpy
-
-# resposta=[['1','2','3'],['8','0','4'],['7','6','5']]
 # matriz=[ ['0','1','2'],['7','8','3'],['6','5','4'] ]
 # Resultado esperado
 resposta = [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '0']]
@@ -19,6 +11,16 @@ matriz = [['4', '1', '3'], ['5', '6', '0'], ['7', '8', '2']]
 matrizTeste = [['0', '6', '1'], ['4', '5', '3'], ['7', '8', '2']]
 # matriz=[['6','5','1'],['4','8','0'],['7','2','3']]
 
+from heapq import heappop, heappush
+from random import shuffle
+from time import sleep
+import numpy
+from copy import deepcopy
+from jogo import JogoDosOito
+
+# import numpy
+
+# resposta=[['1','2','3'],['8','0','4'],['7','6','5']]
 
 # matriz=[ ['1','2','3'],['4','5','0'],['6','7','8'] ]
 # matriz=[ ['1','3','0'],['4','5','6'],['7','8','2'] ]
@@ -163,64 +165,62 @@ def posicaoErrada(matriz, resposta):
                 cont += 1
     return cont
 
-# Busca gulosa utilizando como fronteira apenas os filhos de um pai que foi escolhido pela distÂncia de manhattan
-def buscaHeuristica(matrizPai, resposta):
-    custoDeEspaco = 0
-    nivel = 0  # Nível da árvore
-    visitados = [matrizPai]  # Começa com o pai
-    while (True):
-        if (numpy.array_equal(matrizPai, resposta)):
-            print("Solucao encontrada")
-            break
-        nivel += 1
-        jogadasPossiveis = []
-        for filho in movimento(matrizPai):
-            if filho not in visitados:
-                jogadasPossiveis.append(filho)
-        print("Tamanho dos visitados = "+str(len(visitados)))
-        custoDeEspaco += len(jogadasPossiveis)  # Todos os filhos gerados
-        try:
-            # Retorna o filho com as peças menos distantes
-            matrizPai = menorSomatorio(jogadasPossiveis)
-            imprimindoTablueiro(matrizPai)
+def MatrizEmString(s):
+    s1 = s[0] + s[1] + s[2]
+    return ''.join([str(v) for v in s1])
 
-        except:
-            print("NAO POSSUI SOLUCAO")
-            break
-        visitados.append(matrizPai)
 
 # Busca gulosa com fronteira muito grande são todos os nós que ainda não foram expandidos
-def busca_heuristica2(matrizPai, resposta):
+def busca_heuristica2(matrizPai, resposta=JogoDosOito.objetivo):
     h = []
     # Adiciona os elementos a heap  (distancia de manhattan , nó)
-    heappush(h, (distaciaDeManhattan(matrizPai, resposta), matrizPai))
+    heappush(h, (distaciaDeManhattan(matrizPai, resposta), matrizPai, 0))
     visitados = [matrizPai]
+    Dicionario=dict()
     cont = 0
     fronteira=0
     qtdnos=0
     while (len(h) > 0):
         if len(h)>fronteira:#Pegar a maior fornteira
             fronteira = len(h)
-        cont += 1
-        print("\n"+str(cont)+"\n")
-        (_, pai) = heappop(h)  # Retira o menor elemento da heap
         
-        imprimindoTablueiro(pai)
+        cont += 1
+        
+        (_,pai, movimentosPai) = heappop(h)  # Retira o menor elemento da heap
+
+        #imprimindoTablueiro(pai)
 
         for filho in movimento(pai):
             qtdnos+=1
             if filho not in visitados:
                 visitados.append(filho)
+                Dicionario[MatrizEmString(filho)] = pai
                 if filho == resposta:
                     print("Solução encontrada")
                     print("Tamanho do vetor dos nós que são visitados "+str(len(visitados)))
                     print("Quantidades de movimento "+str(cont))
                     print("Maior fronteira de estados guardada "+ str(fronteira))
                     print("Quantidade de nós geradas "+ str(qtdnos))
+                    print("Profundidade " + str(movimentosPai+1))
+                    resposta=[]
+                    node=filho
+                    x=0
+                    while node != matrizPai:
+                        resposta.append(node)
+                        node = Dicionario[MatrizEmString(node)]
+                    resposta.append(matrizPai)
+                    resposta.reverse()
+                    for i in resposta: 
+                        print(x,"\n")
+                        imprimindoTablueiro(i)
+                        x+=1
+
                     
-                    return
+                    return resposta
+
                 else:
-                    heappush(h, (distaciaDeManhattan(filho, resposta), filho))
+                    movimentosFilho = movimentosPai + 1
+                    heappush(h, (distaciaDeManhattan(filho, resposta), filho,movimentosFilho))
 
     print("Sem Solucao")
 
@@ -231,77 +231,37 @@ def buscaHeuristicaAEstrela(matrizPai, resposta):
     # valor do nó da matriz pai = 0 + (distaciaDeManhattan(matrizPai,resposta)
     heappush(h, (distaciaDeManhattan(matrizPai, resposta), 0, matrizPai))
     visitados = [matrizPai]
+    dicionario = dict()
     cont = 0
     while (len(h) > 0):
         cont += 1
-        print("\n"+str(cont)+"\n")
+        # print("\n"+str(cont)+"\n")
         (_, movimentosPai, pai) = heappop(h)  # Retira o menor elemento da heap
-        imprimindoTablueiro(pai)
+        # imprimindoTablueiro(pai)
 
         for filho in movimento(pai):
             if filho not in visitados:
                 visitados.append(filho)
+                filhoStr = MatrizEmString(filho)
+                dicionario[filhoStr] = pai
                 if filho == resposta:
-                    imprimindoTablueiro(filho)
-                    print("Solução encontrada")
-                    print("Quantidade de movimentos: ", movimentosPai+1)
-                    print(len(visitados))
-                    return
+                    resposta = []
+                    node = filho
+                    x = 0
+                    while node != matrizPai:
+                        resposta.append(node)
+                        node = dicionario[MatrizEmString(node)]
+                    resposta.append(matrizPai)
+                    resposta.reverse()
+                    for i in resposta:
+                        print(x, "\n")
+                        imprimindoTablueiro(i)
+                        x += 1
+
+                    return resposta
                 else:
                     movimentosFilho = movimentosPai + 1
                     heappush(
                         h, (movimentosFilho + distaciaDeManhattan(filho, resposta), movimentosFilho, filho))
 
     print("Sem Solucao")
-
-
-buscaHeuristicaAEstrela(matrizTeste, resposta)
-
-"""
-
-# Função de conversão para str
-def son2str(s):
-    s1 = s[0] + s[1] + s[2]
-    return ''.join([str(v) for v in s1])
-
-def busca_a_Star(start,goal,heuristica):
-    h = []
-    heappush(h,(heuristica(start, goal), start))
-    pais = dict()
-    visited = [start]
-    cont=0
-    while (len(h) > 0):
-        cont+=1
-       # print(cont)
-        (_, pai) = heappop(h)#Retira o menor elemento da heap
-        for filho in movimento(pai):
-            if filho not in visited:
-                visited.append(filho)
-                pais[son2str(filho)] = pai
-                no = filho
-                profund = 0
-                while no != start:
-                    no = pais[son2str(no)]
-                    profund += 1
-                if filho == goal:
-                    print(len(visited))
-                    print("Solução encontrada")
-                    return 
-                else:
-                    heappush(h, (heuristica(filho, goal)+ profund, filho))#Adiciona os itens na heap((distancia)+profundidade , filho)
-    print("Nao tem solucao")
-
-"""
-
-# matriz=criandoTabuleiro()
-# imprimindoTablueiro(matriz)
-# lances=movimento(matriz)
-# print(lances)
-# custo=distanciaDosMovimentos(matriz,resposta)
-# buscaEmProfundidade(matriz)
-
-# buscaHeuristica(matriz,resposta)
-
-# busca_heuristica2(matriz,resposta)
-
-# busca_a_Star(matriz,resposta,distaciaDeManhattan)

@@ -28,7 +28,7 @@ def buscaEmProfundidade(jogo, resposta=JogoDosOito.objetivo):
     estadosVisitados = 0
     maiorFronteira = 0
 
-    profundidadeMaxima = 10
+    profundidadeMaxima = 11
     while pilha:
         if len(pilha) > maiorFronteira:  # pega a maior fronteira que foi guardada
             maiorFronteira = len(pilha)
@@ -92,7 +92,7 @@ def buscaEmLargura(jogo, resposta=JogoDosOito().objetivo):
     estadosVisitados = 0
     maiorFronteira = 0
 
-    while (profundidade < 31):
+    while (profundidade < 15):
 
         if len(fronteira[0]) > maiorFronteira:
             maiorFronteira = len(fronteira[0])
@@ -129,82 +129,6 @@ def buscaEmLargura(jogo, resposta=JogoDosOito().objetivo):
     print('Maior fronteira: ', maiorFronteira)
     return node[1]
 
-
-def movimento2(matriz=JogoDosOito()):
-    direcoes = matriz.movimentosPossiveis()
-    filhos = []
-    for direcao in direcoes:
-        jogoAdd = deepcopy(matriz)
-        jogoAdd.move(direcao)
-        filhos.append(jogoAdd)
-    return filhos
-
-
-def menorSomatorio2(filhos):
-    menor = float('inf')
-    for filho in filhos:
-        if filho.distanciaDeManhattan() < menor:
-            melhorFilho = filho
-            menor = filho.distanciaDeManhattan()
-    return melhorFilho
-
-
-def buscaHeuristica(matrizPai=JogoDosOito(), resposta=JogoDosOito.objetivo):
-    custoDeEspaco = 0
-    nivel = 0  # Nível da árvore
-    visitados = [matrizPai.jogo]  # Começa com o pai
-    while (True):
-        if (matrizPai.estaCerto()):
-            print("Solucao encontrada")
-            break
-        nivel += 1
-        jogadasPossiveis = []
-        for filho in movimento2(matrizPai):
-            if filho.jogo not in visitados:
-               # visitados.append(filho)
-                jogadasPossiveis.append(filho)
-                # visitados.append(filho)
-        print("Tamanho dos visitados = "+str(len(visitados)))
-        custoDeEspaco += len(jogadasPossiveis)  # Todos os filhos gerados
-        try:
-            # Retorna o filho com as peças menos distantes
-            matrizPai = menorSomatorio2(jogadasPossiveis)
-            matrizPai.imprime()
-        except:
-            print("NAO POSSUI SOLUCAO")
-            break
-        visitados.append(matrizPai.jogo)
-
-
-def busca_heuristica2adaptada(matrizPai=JogoDosOito(), resposta=JogoDosOito().objetivo):
-    h = []
-    nome = 0
-    # Adiciona os elementos a heap  (distancia de manhattan , nó)
-    heappush(h, (matrizPai.distanciaDeManhattan(), nome, matrizPai))
-    visitados = [matrizPai]
-    cont = 0
-
-    while (len(h) > 0):
-        cont += 1
-        print("\n"+str(cont)+"\n")
-        (_, __, pai) = heappop(h)  # Retira o menor elemento da heap
-        pai.imprime()
-
-        for filho in movimento2(pai):
-            nome += 1
-            print(movimento2(pai))
-            if filho.jogo not in visitados:
-                visitados.append(filho)
-                if filho.estaCerto():
-                    print("Solução encontrada")
-                    print(len(visitados))
-                    return
-                else:
-                    heappush(h, (filho.distanciaDeManhattan(), nome, filho))
-
-    print("Sem Solucao")
-
-
 def executaBuscaHeuristica():
     matriz = [['1', '3', '0'], ['4', '5', '6'], ['7', '8', '2']]
     resposta = [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '0']]
@@ -232,9 +156,4 @@ jogo.jogo[0] = [1, 3, ' ']
 jogo.jogo[1] = [4, 5, 6]
 jogo.jogo[2] = [7, 8, 2]
 
-caminho = buscaEmProfundidade(jogo)
-
-aplicandoCaminho(jogo, caminho)
-
-#Execuntando a busca gulosa
-executaBuscaHeuristica()
+buscaEmProfundidade(jogo)
