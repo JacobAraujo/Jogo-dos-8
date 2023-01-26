@@ -16,12 +16,13 @@ def start_game():
     matriz = [['1', '3', '0'], ['4', '5', '6'], ['7', '8', '2']]
     resposta = [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '0']]
     
-    print("Selecione o método de busca:")
+    print("Selecione o metodo de busca:")
     print("1. Busca heuristica")
-    print("2. Busca em largura")
-    print("3. Busca em profundidade")
+    print("2. Busca A*")
+    print("3. Busca em largura")
+    print("4. Busca em profundidade")
 
-    escolha = "1"
+    escolha = "4"
 
     if escolha == "1":
         caminho = busca_heuristica2(matriz, resposta)
@@ -53,6 +54,7 @@ def start_game():
         jogo.imprime()
         for direcao in caminho:
             jogo.move(direcao)
+            jogo.imprime()
             update_game_state(jogo)
             root.update()
             sleep(1)

@@ -23,11 +23,12 @@ def buscaEmProfundidade(jogo=JogoDosOito(), resposta=JogoDosOito.objetivo):
 
     pilha = [estadoInicial]
     menor = float('inf')
+    maxIteracao = float('inf')
     visitados = set()
     estadosVisitados = 0
     maiorFronteira = 0
 
-    profundidadeMaxima = 31
+    profundidadeMaxima = 20
     while pilha:
         if len(pilha) > maiorFronteira:  # pega a maior fronteira que foi guardada
             maiorFronteira = len(pilha)
@@ -67,6 +68,9 @@ def buscaEmProfundidade(jogo=JogoDosOito(), resposta=JogoDosOito.objetivo):
         
         visitados.add(estadoAtual[0])
         estadosVisitados += 1  # Pega quantos nós foram visitados
+        
+        if estadosVisitados >= maxIteracao:
+            break
 
     estadoMelhor[0].imprime()
     print(estadoMelhor[0].distanciaDeManhattan())
@@ -130,8 +134,6 @@ def executaBuscaHeuristica():
     resposta = [['1', '2', '3'], ['4', '5', '6'], ['7', '8', '0']]
     busca_heuristica2(matriz, resposta)
 
-
-
 def aplicandoCaminho(jogo, caminho):
     jogo.imprime()
     for direcao in caminho:
@@ -139,17 +141,17 @@ def aplicandoCaminho(jogo, caminho):
         jogo.imprime()
 
 
-jogo = JogoDosOito()
-# jogo.jogo[0] = [1, 2, ' ']
+# jogo = JogoDosOito()
+# # jogo.jogo[0] = [1, 2, ' ']
+# # jogo.jogo[1] = [4, 5, 6]
+# # jogo.jogo[2] = [3, 7, 8]
+
+# # jogo.jogo[0] = [7, 3, ' ']
+# # jogo.jogo[1] = [4, 8, 6]
+# # jogo.jogo[2] = [2, 1, 5]
+
+# jogo.jogo[0] = [1, 3, ' ']
 # jogo.jogo[1] = [4, 5, 6]
-# jogo.jogo[2] = [3, 7, 8]
+# jogo.jogo[2] = [7, 8, 2]
 
-# jogo.jogo[0] = [7, 3, ' ']
-# jogo.jogo[1] = [4, 8, 6]
-# jogo.jogo[2] = [2, 1, 5]
-
-jogo.jogo[0] = [1, 3, ' ']
-jogo.jogo[1] = [4, 5, 6]
-jogo.jogo[2] = [7, 8, 2]
-
-buscaEmProfundidade(jogo)
+# buscaEmProfundidade(jogo)
