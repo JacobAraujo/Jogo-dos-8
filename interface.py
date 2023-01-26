@@ -125,31 +125,31 @@ def start():
 def telaHome():#reset
     apagaJanela()
     global entrada,entrada1,entrada2,entrada3,entrada4,entrada5,entrada6,entrada7,entrada8,entrada9,escolha,mensagemProcessando
-    mensagem = Label(window, text="Insira o estado Inicial", font="impact 20 normal")
+    mensagem = Label(window, text="Insira o estado Inicial", font="Arial 24")
     mensagem.pack()
     jogoDosOito = Frame(window)
     jogoDosOito.pack()
-    entrada = ttk.Entry(jogoDosOito, font="arial 15 bold",width=5)
+    entrada = ttk.Entry(jogoDosOito, font="arial 20 bold",width=5)
     entrada.grid(row=0,column=0)
-    entrada2 = ttk.Entry(jogoDosOito, font="arial 15 bold",width=5)
+    entrada2 = ttk.Entry(jogoDosOito, font="arial 20 bold",width=5)
     entrada2.grid(row=0,column=1)
-    entrada3 = ttk.Entry(jogoDosOito, font="arial 15 bold",width=5)
+    entrada3 = ttk.Entry(jogoDosOito, font="arial 20 bold",width=5)
     entrada3.grid(row=0,column=2)
-    entrada4 = ttk.Entry(jogoDosOito, font="arial 15 bold",width=5)
+    entrada4 = ttk.Entry(jogoDosOito, font="arial 20 bold",width=5)
     entrada4.grid(row=1,column=0)
-    entrada5 = ttk.Entry(jogoDosOito, font="arial 15 bold",width=5)
+    entrada5 = ttk.Entry(jogoDosOito, font="arial 20 bold",width=5)
     entrada5.grid(row=1,column=1)
-    entrada6 = ttk.Entry(jogoDosOito, font="arial 15 bold",width=5)
+    entrada6 = ttk.Entry(jogoDosOito, font="arial 20 bold",width=5)
     entrada6.grid(row=1,column=2)
-    entrada7 = ttk.Entry(jogoDosOito, font="arial 15 bold",width=5)
+    entrada7 = ttk.Entry(jogoDosOito, font="arial 20 bold",width=5)
     entrada7.grid(row=2,column=0)
-    entrada8 = ttk.Entry(jogoDosOito, font="arial 15 bold",width=5)
+    entrada8 = ttk.Entry(jogoDosOito, font="arial 20 bold",width=5)
     entrada8.grid(row=2,column=1)
-    entrada9 = ttk.Entry(jogoDosOito, font="arial 15 bold",width=5)
+    entrada9 = ttk.Entry(jogoDosOito, font="arial 20 bold",width=5)
     entrada9.grid(row=2,column=2)
     
     #radioButtons:
-    mensagemAlg = Label(window, text="Selecione um algoritmo de busca: ", font="arial 12 bold")
+    mensagemAlg = Label(window, text="Selecione o algoritmo de busca: ", font="arial 24 bold")
     mensagemAlg.pack()
     escolha = StringVar()#Guarda o valor escolhido
     escolha.set(1)
@@ -161,7 +161,7 @@ def telaHome():#reset
     escolha2.pack(padx=(0,33))
     escolha3.pack(padx=(33,0))
     escolha4.pack(padx=(0,79))
-    botao = ttk.Button(window, text="Começar", command=start,cursor="hand2")
+    botao = ttk.Button(window, text="Iniciar", command=start,cursor="hand2")
     botao.pack()
 
     mensagemProcessando = Label(window, text="", font="Arial 10 normal")
@@ -196,7 +196,7 @@ def apagaJanela():
 if __name__ == "__main__":  
     window = Tk()#instanciamos a classe tk
     window.title("IA - Jogo dos Oito")
-    window.geometry("300x320+200+100")#largura x altura + pos_x + posy
+    window.geometry("600x640+200+100")#largura x altura + pos_x + posy
     menu = Menu(window)
     window.config(menu=menu)
     menu.add_cascade(label='Resetar',command=telaHome)

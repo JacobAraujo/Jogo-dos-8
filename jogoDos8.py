@@ -204,7 +204,7 @@ def busca_heuristica2(matrizPai, resposta):
         cont += 1
         print("\n"+str(cont)+"\n")
         (_, pai) = heappop(h)  # Retira o menor elemento da heap
-        
+
         imprimindoTablueiro(pai)
 
         for filho in movimento(pai):
@@ -255,7 +255,7 @@ def buscaHeuristicaAEstrela(matrizPai, resposta):
     print("Sem Solucao")
 
 
-buscaHeuristicaAEstrela(matrizTeste, resposta)
+#buscaHeuristicaAEstrela(matrizTeste, resposta)
 
 """
 
